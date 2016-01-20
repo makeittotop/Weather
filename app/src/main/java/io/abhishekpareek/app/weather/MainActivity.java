@@ -12,6 +12,11 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -42,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         if (isNetworkAvailable()) {
-            getWeatherDataFromURL("https://api.forecast.io/forecast/8980c1e00b2ca68801c88d956b9b27d0/37.8267,-122.423");
+            getWeatherDataFromURL("https://api.forecast.io/forecast/8980c1e00b2ca68801c88d956b9b27d0/25.1019,55.1678");
         } else {
             alertUser("Network Unavailable");
         }
@@ -79,14 +84,52 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                Log.v(TAG, response.body().string());
+                String jsonData = response.body().string();
+                Log.v(TAG, jsonData);
                 if (response.isSuccessful()) {
-
+                    getCurrentWeatherData(jsonData);
                 } else {
                     alertUser("Something went wrong!");
                 }
             }
         });
+
+        return;
+    }
+
+    private void getCurrentWeatherData(String jsonData) {
+        JSONObject jsonResponse;
+
+        try {
+            jsonResponse = new JSONObject(jsonData);
+
+            JSONObject currentData = jsonResponse.getJSONObject("currently");
+
+            final CurrentWeatherData currentWeatherData = new CurrentWeatherData();
+
+            currentWeatherData.setSummary(currentData.getString("summary"));
+            currentWeatherData.setTime(currentData.getLong("time"));
+            currentWeatherData.setIcon(currentData.getString("icon"));
+            currentWeatherData.setTemperature((currentData.getDouble("temperature") - 32) * 5 / 9);
+            //currentWeatherData.setVisibility(currentData.getDouble("visibility"));
+            //currentWeatherData.set(currentData.(""));
+            Log.d(TAG, currentWeatherData.toString());
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    TextView tView = (TextView) findViewById(R.id.current_temp);
+                    Log.d(TAG, tView.getText().toString());
+
+                    tView.setText(String.format("%.2f", currentWeatherData.getTemperature()));
+                    Log.d(TAG, tView.getText().toString());
+                }
+            });
+
+            //JSONArray currentData = jsonResponse.optJSONArray("currently");
+        } catch (JSONException e) {
+            alertUser(e.toString());
+        }
 
         return;
     }
