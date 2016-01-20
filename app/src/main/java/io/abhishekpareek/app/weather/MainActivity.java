@@ -113,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
             currentWeatherData.setTemperature((currentData.getDouble("temperature") - 32) * 5 / 9);
             currentWeatherData.setPrecipitationChance(currentData.getDouble("precipProbability"));
             currentWeatherData.setTime(currentData.getLong("time"));
+            currentWeatherData.setHumidity(currentData.getDouble("humidity"));
 
             //currentWeatherData.set(currentData.(""));
             Log.d(TAG, currentWeatherData.toString());
@@ -137,6 +138,15 @@ public class MainActivity extends AppCompatActivity {
 
                     Drawable res = getResources().getDrawable(imageResource);
                     currentWeatherImageView.setImageDrawable(res);
+
+                    TextView humidityView = (TextView) findViewById(R.id.humidityValue);
+                    humidityView.setText(String.valueOf(currentWeatherData.getHumidity()));
+
+                    TextView precipitationView = (TextView) findViewById(R.id.precipitationValue);
+                    precipitationView.setText(String.valueOf(currentWeatherData.getPrecipitationChance()));
+
+                    TextView summaryView = (TextView) findViewById(R.id.summaryLabel);
+                    summaryView.setText(currentWeatherData.getSummary());
                 }
             });
 

@@ -16,6 +16,15 @@ public class CurrentWeatherData {
     private  double mTemperature;
     private double mPrecipitationChance;
     private String mTimeZone;
+    private double mHumidity;
+
+    public double getHumidity() {
+        return mHumidity;
+    }
+
+    public void setHumidity(double humidity) {
+        mHumidity = humidity;
+    }
 
     public String getTimeZone() {
         return mTimeZone;
