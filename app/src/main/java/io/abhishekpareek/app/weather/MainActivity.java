@@ -1,6 +1,7 @@
 package io.abhishekpareek.app.weather;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -119,11 +121,22 @@ public class MainActivity extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    TextView tView = (TextView) findViewById(R.id.current_temp);
-                    Log.d(TAG, tView.getText().toString());
+                    TextView temperatureView = (TextView) findViewById(R.id.temperatureLabel);
+                    Log.d(TAG, temperatureView.getText().toString());
 
-                    tView.setText(currentWeatherData.getFormattedTime());
-                    Log.d(TAG, tView.getText().toString());
+                    temperatureView.setText(currentWeatherData.getFormattedTemperature());
+                    Log.d(TAG, temperatureView.getText().toString());
+
+                    TextView timeView = (TextView) findViewById(R.id.timeLabel);
+                    timeView.setText(currentWeatherData.getFormattedTime());
+
+                    ImageView currentWeatherImageView = (ImageView) findViewById(R.id.currentWeatherImageView);
+
+                    String uri = "@drawable/" + currentWeatherData.getIconID();
+                    int imageResource = getResources().getIdentifier(uri, null, getPackageName());
+
+                    Drawable res = getResources().getDrawable(imageResource);
+                    currentWeatherImageView.setImageDrawable(res);
                 }
             });
 

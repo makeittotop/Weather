@@ -71,44 +71,50 @@ public class CurrentWeatherData {
         SimpleDateFormat format = new SimpleDateFormat("HH:mm a");
         format.setTimeZone(TimeZone.getTimeZone(mTimeZone));
 
-        return String.format("%.2f", getTemperature()) + " at " + format.format(date);
+        String formattedTime = format.format(date);
+
+        return "At " + formattedTime + " it is";
     }
 
-    public Icons getIconID() {
+    public String getFormattedTemperature() {
+        return String.valueOf(Math.round(getTemperature())); // + " at " + format.format(date);
+    }
+
+    public String getIconID() {
         String icon = getIcon();
-        Icons iconID;
+        String iconID;
 
         switch (icon.toString()) {
             //clear-day, clear-night, rain, snow, sleet, wind, fog, cloudy, partly-cloudy-day, or partly-cloudy-night
             case "clear-night":
-                iconID = Icons.CLEAR_NIGHT;
+                iconID = "clear_night";
                 break;
             case "rain":
-                iconID = Icons.RAIN;
+                iconID = "rain";
                 break;
             case "snow":
-                iconID = Icons.SNOW;
+                iconID = "snow";
                 break;
             case "sleet":
-                iconID = Icons.SLEET;
+                iconID = "sleet";
                 break;
             case "wind":
-                iconID = Icons.WIND;
+                iconID = "wind";
                 break;
             case "fog":
-                iconID = Icons.FOG;
+                iconID = "fog";
                 break;
             case "cloudy":
-                iconID = Icons.CLOUDY;
+                iconID = "cloudy";
                 break;
             case "partly-cloudy-night":
-                iconID = Icons.PARTLY_CLOUDY_NIGHT;
+                iconID = "cloudy_night";
                 break;
             case "partly-cloudy-day":
-                iconID = Icons.PARTLY_CLOUDY_DAY;
+                iconID = "partly_cloudy";
                 break;
             default:
-                iconID = Icons.CLEAR_DAY;
+                iconID = "clear_day";
         }
 
         return iconID;
