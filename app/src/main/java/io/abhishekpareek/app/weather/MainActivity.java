@@ -93,8 +93,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
-        return;
     }
 
     private void getCurrentWeatherData(String jsonData) {
@@ -106,14 +104,17 @@ public class MainActivity extends AppCompatActivity {
             JSONObject currentData = jsonResponse.getJSONObject("currently");
 
             final CurrentWeatherData currentWeatherData = new CurrentWeatherData();
+            currentWeatherData.setTimeZone(jsonResponse.getString("timezone"));
 
             currentWeatherData.setSummary(currentData.getString("summary"));
-            currentWeatherData.setTime(currentData.getLong("time"));
             currentWeatherData.setIcon(currentData.getString("icon"));
             currentWeatherData.setTemperature((currentData.getDouble("temperature") - 32) * 5 / 9);
-            //currentWeatherData.setVisibility(currentData.getDouble("visibility"));
+            currentWeatherData.setPrecipitationChance(currentData.getDouble("precipProbability"));
+            currentWeatherData.setTime(currentData.getLong("time"));
+
             //currentWeatherData.set(currentData.(""));
             Log.d(TAG, currentWeatherData.toString());
+            Log.d(TAG, String.valueOf(currentWeatherData.getIconID()));
 
             runOnUiThread(new Runnable() {
                 @Override
@@ -121,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
                     TextView tView = (TextView) findViewById(R.id.current_temp);
                     Log.d(TAG, tView.getText().toString());
 
-                    tView.setText(String.format("%.2f", currentWeatherData.getTemperature()));
+                    tView.setText(currentWeatherData.getFormattedTime());
                     Log.d(TAG, tView.getText().toString());
                 }
             });
@@ -130,8 +131,6 @@ public class MainActivity extends AppCompatActivity {
         } catch (JSONException e) {
             alertUser(e.toString());
         }
-
-        return;
     }
 
     private void alertUser(String message) {
