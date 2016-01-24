@@ -50,23 +50,30 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        final double latitude = 25.1019;
+        final double longitude = 55.1678;
+        // Get the current device location here
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Fetching current weather data ...", Snackbar.LENGTH_SHORT)
                         .setAction("Action", null).show();
+
+                getCurrentWeather(latitude, longitude);
             }
         });
 
+        getCurrentWeather(latitude, longitude);
+    }
 
+    private void getCurrentWeather(double latitude, double longitude) {
         if (isNetworkAvailable()) {
-            getWeatherDataFromURL("https://api.forecast.io/forecast/8980c1e00b2ca68801c88d956b9b27d0/25.1019,55.1678");
+            getWeatherDataFromURL("https://api.forecast.io/forecast/8980c1e00b2ca68801c88d956b9b27d0/" + latitude + "," + longitude);
         } else {
             alertUser("Network Unavailable");
         }
-
-
     }
 
     private boolean isNetworkAvailable() {
@@ -131,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, currentWeatherData.toString());
             Log.d(TAG, String.valueOf(currentWeatherData.getIconID()));
 
+            // model data binding to the view
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -142,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
                     Drawable res = getResources().getDrawable(imageResource);
                     currentWeatherImageView.setImageDrawable(res);
                     humidityView.setText(String.valueOf(currentWeatherData.getHumidity()));
-                    precipitationView.setText(String.valueOf(currentWeatherData.getPrecipitationChance()));
+                    precipitationView.setText(String.valueOf(currentWeatherData.getPrecipitationChance()) + " %");
                     summaryView.setText(currentWeatherData.getSummary());
                 }
             });

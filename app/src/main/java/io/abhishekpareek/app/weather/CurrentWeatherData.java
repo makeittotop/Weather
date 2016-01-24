@@ -34,8 +34,8 @@ public class CurrentWeatherData {
         mTimeZone = timeZone;
     }
 
-    public double getPrecipitationChance() {
-        return mPrecipitationChance;
+    public int getPrecipitationChance() {
+        return (int) Math.round(mPrecipitationChance * 100);
     }
 
     public void setPrecipitationChance(double precipitationChance) {

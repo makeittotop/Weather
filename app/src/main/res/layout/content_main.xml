@@ -17,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/temperatureLabel"
-        android:text="N.A"
+        android:text="--"
         android:textColor="@android:color/white"
         android:textSize="150sp"
         android:editable="false"
@@ -40,7 +40,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/timeLabel"
-        android:text="At 12:00 P.M. it is"
+        android:text="..."
         android:textColor="#aeffffff"
         android:editable="false"
         android:enabled="false"
@@ -106,7 +106,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="0.56"
+                android:text="--"
                 android:id="@+id/humidityValue"
                 android:textColor="@android:color/white"
                 android:textIsSelectable="false"
@@ -142,7 +142,7 @@
                 android:layout_gravity="center_horizontal"
                 android:textColor="@android:color/white"
                 android:textSize="25sp"
-                android:text="100%"
+                android:text="--"
                 android:gravity="center_horizontal"/>
         </LinearLayout>
 
@@ -151,7 +151,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Summary"
+        android:text="Fetching  current weather data ..."
         android:id="@+id/summaryLabel"
         android:layout_below="@+id/linearLayout"
         android:layout_alignParentLeft="true"
@@ -159,7 +159,7 @@
         android:layout_marginTop="30sp"
         android:gravity="center_horizontal"
         android:textColor="@android:color/white"
-        android:textSize="18sp"
+        android:textSize="25sp"
         android:textIsSelectable="false"
         android:enabled="false"
         android:editable="false"
