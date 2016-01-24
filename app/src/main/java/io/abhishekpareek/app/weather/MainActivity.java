@@ -22,6 +22,8 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -31,10 +33,20 @@ import okhttp3.Response;
 public class MainActivity extends AppCompatActivity {
     public static final String TAG = MainActivity.class.getSimpleName();
 
+    @Bind(R.id.temperatureLabel) TextView temperatureView;
+    @Bind(R.id.timeLabel) TextView timeView;
+    @Bind(R.id.currentWeatherImageView) ImageView currentWeatherImageView;
+    @Bind(R.id.humidityValue) TextView humidityView;
+    @Bind(R.id.precipitationValue) TextView precipitationView;
+    @Bind(R.id.summaryLabel) TextView summaryView;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -122,30 +134,15 @@ public class MainActivity extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    TextView temperatureView = (TextView) findViewById(R.id.temperatureLabel);
-                    Log.d(TAG, temperatureView.getText().toString());
-
                     temperatureView.setText(currentWeatherData.getFormattedTemperature());
                     Log.d(TAG, temperatureView.getText().toString());
-
-                    TextView timeView = (TextView) findViewById(R.id.timeLabel);
                     timeView.setText(currentWeatherData.getFormattedTime());
-
-                    ImageView currentWeatherImageView = (ImageView) findViewById(R.id.currentWeatherImageView);
-
                     String uri = "@drawable/" + currentWeatherData.getIconID();
                     int imageResource = getResources().getIdentifier(uri, null, getPackageName());
-
                     Drawable res = getResources().getDrawable(imageResource);
                     currentWeatherImageView.setImageDrawable(res);
-
-                    TextView humidityView = (TextView) findViewById(R.id.humidityValue);
                     humidityView.setText(String.valueOf(currentWeatherData.getHumidity()));
-
-                    TextView precipitationView = (TextView) findViewById(R.id.precipitationValue);
                     precipitationView.setText(String.valueOf(currentWeatherData.getPrecipitationChance()));
-
-                    TextView summaryView = (TextView) findViewById(R.id.summaryLabel);
                     summaryView.setText(currentWeatherData.getSummary());
                 }
             });
