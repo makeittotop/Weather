@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.humidityValue) TextView humidityView;
     @Bind(R.id.precipitationValue) TextView precipitationView;
     @Bind(R.id.summaryLabel) TextView summaryView;
+    @Bind(R.id.weatherUpdateBar) ProgressBar mWeatherUpdateBar;
 
 
     @Override
@@ -53,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
         final double latitude = 25.1019;
         final double longitude = 55.1678;
         // Get the current device location here
+
+        mWeatherUpdateBar.setVisibility(View.INVISIBLE);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -70,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void getCurrentWeather(double latitude, double longitude) {
         if (isNetworkAvailable()) {
+            mWeatherUpdateBar.setVisibility(View.VISIBLE);
             getWeatherDataFromURL("https://api.forecast.io/forecast/8980c1e00b2ca68801c88d956b9b27d0/" + latitude + "," + longitude);
         } else {
             alertUser("Network Unavailable");
@@ -152,6 +157,7 @@ public class MainActivity extends AppCompatActivity {
                     humidityView.setText(String.valueOf(currentWeatherData.getHumidity()));
                     precipitationView.setText(String.valueOf(currentWeatherData.getPrecipitationChance()) + " %");
                     summaryView.setText(currentWeatherData.getSummary());
+                    mWeatherUpdateBar.setVisibility(View.INVISIBLE);
                 }
             });
 

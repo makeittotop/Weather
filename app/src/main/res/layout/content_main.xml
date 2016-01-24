@@ -168,4 +168,12 @@
         android:focusable="false"
         android:focusableInTouchMode="false"/>
 
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/weatherUpdateBar"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:indeterminateTint="#3f51b5"/>
+
 </RelativeLayout>
