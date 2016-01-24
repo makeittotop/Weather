@@ -34,6 +34,9 @@ import okhttp3.Response;
 public class MainActivity extends AppCompatActivity {
     public static final String TAG = MainActivity.class.getSimpleName();
 
+    private double latitude;
+    private double longitude;
+
     @Bind(R.id.temperatureLabel) TextView temperatureView;
     @Bind(R.id.timeLabel) TextView timeView;
     @Bind(R.id.currentWeatherImageView) ImageView currentWeatherImageView;
@@ -49,11 +52,32 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        /*
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        final double latitude = 25.1019;
-        final double longitude = 55.1678;
+        mWeatherUpdateBar.setVisibility(View.INVISIBLE);
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Fetching current weather data ...", Snackbar.LENGTH_SHORT)
+                        .setAction("Action", null).show();
+
+                getCurrentWeather(latitude, longitude);
+            }
+        });
+        */
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Get the current device location here
+
+        latitude = 25.1019;
+        longitude = 55.1678;
         // Get the current device location here
 
         mWeatherUpdateBar.setVisibility(View.INVISIBLE);
