@@ -2,9 +2,11 @@ package io.abhishekpareek.app.weather;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +18,7 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,9 +36,12 @@ import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
     public static final String TAG = MainActivity.class.getSimpleName();
-
+    private GPSTracker mGPSTracker;
     private double latitude;
     private double longitude;
+
+    @Bind(R.id.coordinatorLayout)
+    CoordinatorLayout mCoordinatorLayout;
 
     @Bind(R.id.temperatureLabel) TextView temperatureView;
     @Bind(R.id.timeLabel) TextView timeView;
@@ -44,13 +50,15 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.precipitationValue) TextView precipitationView;
     @Bind(R.id.summaryLabel) TextView summaryView;
     @Bind(R.id.weatherUpdateBar) ProgressBar mWeatherUpdateBar;
-
+    @Bind(R.id.locationLabel) TextView locationLabel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        mGPSTracker = new GPSTracker(MainActivity.this);
 
         /*
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -71,16 +79,28 @@ public class MainActivity extends AppCompatActivity {
         */
     }
 
+    private void getCurrentLocation() {
+        if (mGPSTracker.canGetLocation()) {
+            latitude = mGPSTracker.getLatitude();
+            longitude = mGPSTracker.getLongitude();
+
+            Snackbar.make(mCoordinatorLayout, "Your Location is - Lat: " + latitude + ", Long: " + longitude, Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+
+            //Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
+        } else {
+            mGPSTracker.showSettingsAlert();
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
-        // Get the current device location here
-
-        latitude = 25.1019;
-        longitude = 55.1678;
-        // Get the current device location here
 
         mWeatherUpdateBar.setVisibility(View.INVISIBLE);
+
+        // Get the current device location here
+        getCurrentLocation();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -92,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
                 getCurrentWeather(latitude, longitude);
             }
         });
+
 
         getCurrentWeather(latitude, longitude);
     }
@@ -171,6 +192,7 @@ public class MainActivity extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    locationLabel.setText(currentWeatherData.getTimeZone());
                     temperatureView.setText(currentWeatherData.getFormattedTemperature());
                     Log.d(TAG, temperatureView.getText().toString());
                     timeView.setText(currentWeatherData.getFormattedTime());
